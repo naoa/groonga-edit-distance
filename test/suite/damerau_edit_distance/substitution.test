@@ -1,0 +1,12 @@
+plugin_register functions/edit_distance
+
+table_create Tags TABLE_PAT_KEY ShortText UInt32
+
+load --table Tags
+[
+{"_key": "Groonga"}
+]
+
+select Tags \
+--output_columns 'damerau_edit_distance("abc", "abd")' \
+--limit 1 --command_version 2

@@ -1,0 +1,48 @@
+plugin_register functions/edit_distance
+[[0,0.0,0.0],true]
+table_create Tags TABLE_PAT_KEY ShortText UInt32
+[[0,0.0,0.0],true]
+load --table Tags
+[
+{"_key": "ai"},
+{"_key": "aiue"},
+{"_key": "a"}
+]
+[[0,0.0,0.0],3]
+select Tags --output_columns '_key, edit_distance_bp("aiu", _key)' --command_version 2
+[
+  [
+    0,
+    0.0,
+    0.0
+  ],
+  [
+    [
+      [
+        3
+      ],
+      [
+        [
+          "_key",
+          "ShortText"
+        ],
+        [
+          "edit_distance_bp",
+          "Object"
+        ]
+      ],
+      [
+        "a",
+        2.0
+      ],
+      [
+        "ai",
+        1.0
+      ],
+      [
+        "aiue",
+        1.0
+      ]
+    ]
+  ]
+]
