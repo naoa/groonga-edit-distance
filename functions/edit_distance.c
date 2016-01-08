@@ -196,7 +196,7 @@ func_edit_distance_bp_var(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data
     unsigned int n_search_ids;
     unsigned int n_compared_ids;
     int char_length;
-    uint64_t char_vector[128] = {0};
+    uint64_t *char_vector;
     uint64_t top;
     uint64_t VP = 0xFFFFFFFFFFFFFFFFULL;
     uint64_t VN = 0;
@@ -279,6 +279,7 @@ func_edit_distance_bp_var(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data
       grn_obj_unlink(ctx, &compared_ids);
       return func_damerau_edit_distance(ctx, nargs, args, user_data);
     }
+    char_vector = (uint64_t *)calloc(grn_table_size(ctx, table), sizeof(uint64_t));
 
     if (n_search_ids >= n_compared_ids) {
       for (i = 0; i < n_search_ids; i++) {
@@ -324,6 +325,7 @@ func_edit_distance_bp_var(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data
       VP = (HN << 1ULL) | ~(D0 | ((HP << 1ULL) | 1ULL));
       VN = D0 & ((HP << 1ULL) | 1ULL);
     }
+    free(char_vector);
     if (!use_cache) {
       grn_obj_unlink(ctx, &search_ids);
     }
