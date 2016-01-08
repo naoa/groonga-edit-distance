@@ -283,14 +283,14 @@ func_edit_distance_bp_var(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data
 
     if (n_search_ids >= n_compared_ids) {
       for (i = 0; i < n_search_ids; i++) {
-        char_vector[grn_uvector_get_element(ctx, search_ids_ptr, i, 0)] |= (1ULL << i);
+        char_vector[GRN_UINT32_VALUE_AT(search_ids_ptr,i)] |= (1ULL << i);
       }
       top = (1ULL << (n_search_ids - 1));
       score = n_search_ids;
       compared_ids_ptr = &compared_ids;
     } else {
       for (i = 0; i < n_compared_ids; i++) {
-        char_vector[grn_uvector_get_element(ctx, &compared_ids, i, 0)] |= (1ULL << i);
+        char_vector[GRN_UINT32_VALUE_AT(&compared_ids,i)] |= (1ULL << i);
       }
       top = (1ULL << (n_compared_ids - 1));
       score = n_compared_ids;
@@ -303,16 +303,16 @@ func_edit_distance_bp_var(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data
       if (with_transposition) {
         uint64_t PM[2];
         if (j > 0) {
-          PM[0] = char_vector[grn_uvector_get_element(ctx, compared_ids_ptr, j - 1, 0)];
+          PM[0] = char_vector[GRN_UINT32_VALUE_AT(compared_ids_ptr,j-1)];
         } else {
           PM[0] = 0;
         }
-        PM[1] = char_vector[grn_uvector_get_element(ctx, compared_ids_ptr, j, 0)];
+        PM[1] = char_vector[GRN_UINT32_VALUE_AT(compared_ids_ptr,j)];
         D0 = ((( ~ D0) & PM[1]) << 1ULL) & PM[0];
         D0 = D0 | (((PM[1] & VP) + VP) ^ VP) | PM[1] | VN;
       } else {
         uint64_t PM;
-        PM = char_vector[grn_uvector_get_element(ctx, compared_ids_ptr, j, 0)];
+        PM = char_vector[GRN_UINT32_VALUE_AT(compared_ids_ptr,j)];
         D0 = (((PM & VP) + VP) ^ VP) | PM | VN;
       }
       HP = VN | ~(D0 | VP);
